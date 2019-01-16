@@ -5,4 +5,4 @@
 
 
 # Demo
-> http://m.lwpoor.cn/ws/fk
+> http://m.lwpoor.cn/ws/kf
