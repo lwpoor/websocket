@@ -1,0 +1,776 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>笑笑同学~~~</title>
+    <meta name="description" content="你的专属机器人！">
+    <meta name="keywords" content="你的专属机器人">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="~/WebSocket/wchat/js/jquery.min.js"></script>
+    <script src="~/layer/layer.js"></script>
+
+    <link href="~/WebSocket/wchat/font_Icon/iconfont.css" rel="stylesheet" />
+    <link href="~/WebSocket/wchat/css/chat.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '', // 必填，公众号的唯一标识
+            timestamp: '', // 必填，生成签名的时间戳
+            nonceStr: '', // 必填，生成签名的随机串
+            signature: '', // 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function () {
+            wx.onMenuShareTimeline({
+                title: '你好！我是笑笑，你的专属机器人',
+                desc: '......',
+                link: 'http://m.lwpoor.cn/ws',
+                imgUrl: 'http://img.lwpoor.cn/hua/timg.jpg',
+                trigger: function (res) {
+                },
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                    //alert(JSON.stringify(res));
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '你好！我是笑笑，你的专属机器人',
+                desc: '......',
+                link: 'http://m.lwpoor.cn/ws',
+                imgUrl: 'http://img.lwpoor.cn/hua/timg.jpg',
+                trigger: function (res) {
+                },
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                    //alert(JSON.stringify(res));
+                }
+            });
+
+            //新加分享到qq,微博,qq空间
+            wx.onMenuShareQQ({
+                title: '你好！我是笑笑，你的专属机器人',
+                desc: '......',
+                link: 'http://m.lwpoor.cn/ws',
+                imgUrl: 'http://img.lwpoor.cn/hua/timg.jpg',
+                success: function (res) {
+
+                },
+                cancel: function (res) {
+
+                },
+                fail: function (res) {
+                    //alert(JSON.stringify(res));
+                }
+            });
+
+            wx.onMenuShareWeibo({
+                title: '你好！我是笑笑，你的专属机器人',
+                desc: '......',
+                link: 'http://m.lwpoor.cn/ws',
+                imgUrl: 'http://img.lwpoor.cn/hua/timg.jpg',
+                success: function (res) {
+
+                },
+                cancel: function (res) {
+
+                },
+                fail: function (res) {
+                    //alert(JSON.stringify(res));
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '你好！我是笑笑，你的专属机器人',
+                desc: '......',
+                link: 'http://m.lwpoor.cn/ws',
+                imgUrl: 'http://img.lwpoor.cn/hua/timg.jpg',
+                success: function (res) {
+
+                },
+                cancel: function (res) {
+
+                },
+                fail: function (res) {
+                    //alert(JSON.stringify(res));
+                }
+            });
+
+        });
+
+        wx.error(function (res) {
+            //alert("接口验证失败，详细信息：\n" + JSON.stringify(res));
+        });
+
+
+
+    </script>
+
+    <style>
+        html {
+            overflow: -moz-hidden-unscrollable;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            -ms-overflow-style: none;
+            overflow: auto;
+        }
+
+        .chatBox {
+            border-radius: 0px;
+            border: solid 0px #d5d5d5;
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 22px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .chatBox-send > div button {
+            padding: 1px 5px;
+            margin-left: 6px;
+        }
+
+        .chatBox-send {
+            width: 100%;
+            padding: 10px 5px;
+            background: #fff;
+            border-top: 1px #fff solid;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .div-textarea {
+            margin-top: 6px;
+            font-family: 叶根友毛笔行书2.0版;
+            font-size: 16px;
+            border-bottom: 1px #ddd solid;
+        }
+
+            .div-textarea:focus {
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0);
+                border-bottom: 1px #01bef0 solid;
+            }
+
+        .author-user {
+            text-align: center;
+            margin: 0px 0 5px 0;
+            color: #888;
+        }
+
+        .author-name {
+            text-align: center;
+            margin: 10px 0 5px 0;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chatContainer">
+        <div class="chatBtn">
+            <i class="iconfont icon-xiaoxi1"></i>
+        </div>
+        <div class="chat-message-num"></div>
+        <div class="chatBox" ref="chatBox">
+            <div class="chatBox-head">
+                <div class="chatBox-head-one">
+                    Conversations
+                    <div class="chat-close" style="margin: 10px 10px 0 0;font-size: 14px">关闭</div>
+                </div>
+                <div class="chatBox-head-two">
+                    <div class="chat-return">返回</div>
+                    <div class="chat-people">
+                        <div class="ChatInfoHead">
+                            <img src="" alt="头像" />
+                        </div>
+                        <div class="ChatInfoName">这是用户的名字，看看名字到底能有多长</div>
+                    </div>
+                    <div class="chat-close">关闭</div>
+                </div>
+            </div>
+            <div class="chatBox-info">
+                <div class="chatBox-list" ref="chatBoxlist">
+                    <div class="chat-list-people">
+                        <div><img src="/WebSocket/wchat/img/touxiang.png" alt="头像" /></div>
+                        <div class="chat-name">
+                            <p>笑笑机器人</p>
+                        </div>
+                        <div class="message-num"></div>
+                    </div>
+
+                </div>
+                <div class="chatBox-kuang" ref="chatBoxkuang">
+                    <div class="chatBox-content">
+                        <div class="chatBox-content-demo" id="chatBox-content-demo">
+
+                        </div>
+                    </div>
+                    <div class="chatBox-send">
+                        <div class="div-textarea" contenteditable="true"></div>
+                        <div>
+                            <button id="chat-biaoqing" class="btn-default-styles">
+                                <i class="iconfont icon-biaoqing"></i>
+                            </button>
+                            <label id="chat-tuxiang" title="发送图片" for="file" class="btn-default-styles">
+                                <input type="file" onchange="selectImg(this)" accept="image/jpg,image/jpeg,image/png,image/gif"
+                                       name="file" id="file" class="hidden">
+                                <i class="iconfont icon-tuxiang"></i>
+                            </label>
+                            <button id="chat-fasong" class="btn-default-styles">
+                                <i class="iconfont icon-fasong"></i>
+                            </button>
+                        </div>
+                        <div class="biaoqing-photo">
+                            <ul>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -120px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -120px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -120px;"></span></li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -102px -120px;"></span>
+                                </li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -133px -120px;"></span>
+                                </li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -164px -120px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -154px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -154px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -154px;"></span></li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -102px -154px;"></span>
+                                </li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -133px -154px;"></span>
+                                </li>
+                                <li>
+                                    <span class="emoji-picker-image" style="background-position: -164px -154px;"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="ToName" value="@ViewBag.Name" />
+    <input type="hidden" id="ToAddress" value="@ViewBag.Address" />
+    <input type="hidden" id="UserName" value="@ViewBag.UserName" />
+    <input type="hidden" id="UserType" value="@ViewBag.Type" />
+    <input type="hidden" id="userIp" value="@Tools.PublicConfig.getIp()" />
+
+
+
+    <script>
+
+        $(function () {
+            screenFuc();
+        });
+        (window.onresize = function () {
+            screenFuc();
+        })();
+        function screenFuc() {
+            var topHeight = $(".chatBox-head").innerHeight();//聊天头部高度
+            if ($('#UserType').val() != "1") {
+                if (isWeiXinBrowser()) {
+                    $(".chatBox-head").remove();
+                    topHeight = 0;
+                    $(".chatBox-info").css("top", 0);
+                }
+            }
+
+            //屏幕小于768px时候,布局change
+            var winWidth = $(window).innerWidth();
+            if (winWidth <= 768) {
+                var totalHeight = $(window).height(); //页面整体高度
+                $(".chatBox-info").css("height", totalHeight - topHeight);
+                var infoHeight = $(".chatBox-info").innerHeight();//聊天头部以下高度
+                //中间内容高度
+                $(".chatBox-content").css("height", infoHeight - 50);
+                $(".chatBox-content-demo").css("height", infoHeight - 50);
+
+                $(".chatBox-list").css("height", totalHeight - topHeight);
+                $(".chatBox-kuang").css("height", totalHeight - topHeight);
+                $(".div-textarea").css("width", winWidth - 130);
+            } else {
+                $(".chatBox-info").css("height", 495);
+                $(".chatBox-content").css("height", 448);
+                $(".chatBox-content-demo").css("height", 448);
+                $(".chatBox-list").css("height", 495);
+                $(".chatBox-kuang").css("height", 495);
+                $(".div-textarea").css("width", 240);
+            }
+        }
+        //判断是否为微信浏览器
+        function isWeiXinBrowser() {
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //未读信息数量为空时
+        var totalNum = $(".chat-message-num").html();
+        if (totalNum == "") {
+            $(".chat-message-num").css("padding", 0);
+        }
+        $(".message-num").each(function () {
+            var wdNum = $(this).html();
+            if (wdNum == "") {
+                $(this).css("padding", 0);
+            }
+        });
+
+        //打开/关闭聊天框
+        $(".chatBtn").click(function () {
+            $(".chatBox").toggle(10);
+        })
+        $(".chat-close").click(function () {
+            $(".chatBox").toggle(10);
+            //ws.close();
+        })
+        //进聊天页面
+        $(".chat-list-people").each(function () {
+            $(this).click(function () {
+                var n = $(this).index();
+                $(".chatBox-head-one").toggle();
+                $(".chatBox-head-two").toggle();
+                $(".chatBox-list").fadeToggle();
+                $(".chatBox-kuang").fadeToggle();
+
+                var username = $(this).children(".chat-name").children("p").eq(0).html();
+                //传名字
+                $(".ChatInfoName").text(username);
+                //传头像
+                $(".ChatInfoHead>img").attr("src", $(this).children().eq(0).children("img").attr("src"));
+
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            })
+        });
+
+        //返回列表
+        $(".chat-return").click(function () {
+            $(".chatBox-head-one").toggle(1);
+            $(".chatBox-head-two").toggle(1);
+            $(".chatBox-list").fadeToggle(1);
+            $(".chatBox-kuang").fadeToggle(1);
+        });
+
+        //发送信息
+        $("#chat-fasong").click(function () {
+            var textContent = $(".div-textarea").html().replace(/[\n\r]/g, '<br>')
+            if (textContent != "") {
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">" + tick() + "</small> </div> " +
+                    "<div class=\"author-user\" style=\"text-align:right;\"><small class=\"chat-date\">@Tools.PublicConfig.getIp()</small> </div>" +
+                    "<div class=\"right\"> <div class=\"chat-message\"> " + textContent + " </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"/WebSocket/wchat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+                //发送后清空输入框
+                $(".div-textarea").html("");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+
+                sendMessage(textContent);
+            }
+        });
+
+        //发送表情
+        $("#chat-biaoqing").click(function () {
+            $(".biaoqing-photo").toggle();
+        });
+        $(document).click(function () {
+            $(".biaoqing-photo").css("display", "none");
+        });
+        $("#chat-biaoqing").click(function (event) {
+            event.stopPropagation();//阻止事件
+        });
+        $(".emoji-picker-image").each(function () {
+            $(this).click(function () {
+                var bq = $(this).parent().html();
+                console.log(bq)
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">" + tick() + "</small> </div> " +
+                    "<div class=\"author-user\" style=\"text-align:right;\"><small class=\"chat-date\">@Tools.PublicConfig.getIp()</small> </div>" +
+                    "<div class=\"right\"> <div class=\"chat-message\"> " + bq + " </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"/WebSocket/wchat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+                //发送后关闭表情框
+                $(".biaoqing-photo").toggle();
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+
+                sendMessage(bq);
+            })
+        });
+
+        //发送图片
+        function selectImg(pic) {
+            if (!pic.files || !pic.files[0]) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                var images = evt.target.result;
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">" + tick() + "</small> </div> " +
+                    "<div class=\"right\"> <div class=\"chat-message\"><img src=" + images + "></div> " +
+                    "<div class=\"chat-avatars\"><img src=\"/WebSocket/wchat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+
+                var data = images.replace("data:image/png;base64,", "");
+                data = data.replace("data:image/gif;base64,", "");
+                data = data.replace("data:image/jpg;base64,", "");
+                data = data.replace("data:image/jpeg;base64,", "");
+                data = data.replace("data:image/bmp;base64,", "");
+                data = data.replace("data:image/pdf;base64,", "");
+                $.ajax({
+                    url: "http://m.lwpoor.cn/ws/UploadImg",
+                    type: "post",
+                    dataType: "json",
+                    data: { hpf: data },
+                    success: function (data) {
+                        var url = data.filesUrl;
+                        sendMessage(url + "%images")
+                    },
+                    error: function (e, s, c) {
+
+                    }
+                })
+
+            };
+            reader.readAsDataURL(pic.files[0]);
+        }
+
+        function tick() {
+            var date = new Date();
+            this.year = date.getFullYear();
+            this.month = date.getMonth() + 1;
+            this.date = date.getDate();
+            this.day = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")[date.getDay()];
+            this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            this.minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            this.second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return this.month + "-" + this.date + " " + this.hour + ":" + this.minute + ":" + this.second + " " + this.day;
+        }
+
+        function sendMessage(msg) {
+            if (ws.readyState == WebSocket.OPEN) {
+                var user = $.trim($("#ToName").val());
+                if (user == null || user == "") {
+                    ws.send(msg);
+                } else {
+                    ws.send(user + "|" + msg);
+                }
+            }
+            else {
+                layer.msg('连接已经关闭');
+            }
+        }
+
+    </script>
+
+    <script>
+        $(function () {
+            $(".chatBox-head-one").toggle();
+            $(".chatBox-head-two").toggle();
+            $(".chatBox-list").fadeToggle();
+            $(".chatBox-kuang").fadeToggle();
+            $(".chat-return").hide();
+            $(".chat-close").hide();
+
+            //传名字
+            $(".ChatInfoName").text("笑笑机器人");
+            //传头像
+            $(".ChatInfoHead>img").attr("src", "http://m.lwpoor.cn/WebSocket/wchat/img/touxiang.png");
+            //聊天框默认最底部
+            $(document).ready(function () {
+                $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+            });
+
+            if ($('#UserType').val() == "1") {
+                var username = $('#ToName').val();
+                var address = $('#ToAddress').val();
+
+                $(".ChatInfoName").hide();
+                $(".ChatInfoHead").hide();
+                $('.chat-people').html("<span>" + username + "(" + address + ")</span>")
+            }
+        })
+    </script>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+    <script>
+        var address = getStor("address");
+        var mesCount = 0;
+        var ws;
+
+        function openWebSockrt() {
+            var url = "ws://m.lwpoor.cn/WebSocket/Handler1.ashx?user=@Tools.PublicConfig.getIp()";
+            var username = $.trim($("#UserName").val());
+            if (username != "") {
+                url = "ws://m.lwpoor.cn/WebSocket/Handler1.ashx?user=" + username;
+            }
+            var user = $.trim($("#ToName").val());
+            if (user != null && user != "") {
+                url += "&ToUser=" + user;
+            }
+            var type = $.trim($("#UserType").val());
+            if (type != "") {
+                url += "&type=" + type;
+            }
+            if (address != null && address != "") {
+                url += "&address=" + address;
+            }
+            ws = new WebSocket(url);
+            ws.onopen = function () {
+                //layer.msg("连接成功！");
+            }
+            ws.onmessage = function (evt) {
+                if (evt.data != "") {
+                    mesCount++;
+                    var data = JSON.parse(evt.data);
+                    var message = data.content;
+                    var length = message.length;
+                    var html = "";
+                    if (message.indexOf("%images") > -1) {
+                        message = message.replace("%images", "");
+                        html = "<div class=\"clearfloat\">";
+                        html += "<div class=\"author-name\"><small class=\"chat-date\">" + data.datetime + "</small> </div> ";
+                        html += ($('#UserName').val() == "18313364090") ?
+                            "<div class=\"author-user\" style=\"text-align:left;\"><small onclick=\"goToUser('" + data.username + "','" + data.address + "')\" class=\"chat-date\">" + data.username + ":" + data.address + "</small> </div>" :
+                            "<div class=\"author-user\" style=\"text-align:left;\"><small class=\"chat-date\">" + data.username + "</small> </div>";
+                        html += "<div class=\"left\"> <div class=\"chat-avatars\"><img src=\"/WebSocket/wchat/img/touxiang.png\" alt=\"头像\" /></div> ";
+                        html += "<div class=\"chat-message\"><img src=" + message + "></div> </div> </div>";
+                    } else {
+                        if (message.indexOf("%tianqi") > -1) {
+                            message = message.replace("%tianqi", "");
+                            try {
+                                if (message.indexOf("%mingtiantianqi") > -1) {
+                                    message = message.replace("%mingtiantianqi", "");
+                                    var weatherinfo = JSON.parse(message);
+                                    var city = weatherinfo.cityInfo.city;//城市
+                                    var wendu = weatherinfo.data.wendu;//当前温度
+                                    var quality = weatherinfo.data.quality;//空气质量
+                                    var shidu = weatherinfo.data.shidu;//湿度
+
+                                    var high = weatherinfo.data.forecast[1].high.replace("高温", "").replace(".0", "");//最高温度
+                                    var low = weatherinfo.data.forecast[1].low.replace("低温", "").replace(".0", "");//最低温度
+                                    var sunset = weatherinfo.data.forecast[1].sunset;//日落时间
+                                    var fx = weatherinfo.data.forecast[1].fx;//风向
+                                    var type = weatherinfo.data.forecast[1].type;//天气
+                                    var notice = weatherinfo.data.forecast[1].notice;//通知
+                                    message = city + "明天" + type + "，" + low + "到" + high + "，" + fx + "，空气质量" + quality + "~~~" + notice + "。"
+                                }
+                                else if (message.indexOf("%houtiantianqi") > -1) {
+                                    message = message.replace("%houtiantianqi", "");
+                                    var weatherinfo = JSON.parse(message);
+                                    var city = weatherinfo.cityInfo.city;//城市
+                                    var wendu = weatherinfo.data.wendu;//当前温度
+                                    var quality = weatherinfo.data.quality;//空气质量
+                                    var shidu = weatherinfo.data.shidu;//湿度
+
+                                    var high = weatherinfo.data.forecast[2].high.replace("高温", "").replace(".0", "");//最高温度
+                                    var low = weatherinfo.data.forecast[2].low.replace("低温", "").replace(".0", "");//最低温度
+                                    var sunset = weatherinfo.data.forecast[2].sunset;//日落时间
+                                    var fx = weatherinfo.data.forecast[2].fx;//风向
+                                    var type = weatherinfo.data.forecast[2].type;//天气
+                                    var notice = weatherinfo.data.forecast[2].notice;//通知
+                                    message = city + "后天" + type + "，" + low + "到" + high + "，" + fx + "，空气质量" + quality + "~~~" + notice + "。"
+                                }
+                                else {
+                                    var weatherinfo = JSON.parse(message);
+                                    var city = weatherinfo.cityInfo.city;//城市
+                                    var wendu = weatherinfo.data.wendu;//当前温度
+                                    var quality = weatherinfo.data.quality;//空气质量
+                                    var shidu = weatherinfo.data.shidu;//湿度
+
+                                    var high = weatherinfo.data.forecast[0].high.replace("高温", "").replace(".0", "");//最高温度
+                                    var low = weatherinfo.data.forecast[0].low.replace("低温", "").replace(".0", "");//最低温度
+                                    var sunset = weatherinfo.data.forecast[0].sunset;//日落时间
+                                    var fx = weatherinfo.data.forecast[0].fx;//风向
+                                    var type = weatherinfo.data.forecast[0].type;//天气
+                                    var notice = weatherinfo.data.forecast[0].notice;//通知
+                                    message = city + "今天" + type + "，" + low + "到" + high + "，当前温度" + wendu + "度，" + fx + "，湿度" + shidu + "，空气质量" + quality + "~~~" + notice + "。"
+                                }
+                            }
+                            catch (err) {
+                                //在这里处理错误
+                                if (message == "") {
+                                    if (navigator.geolocation && address == null) {  //判断是否支持Geolocation API
+                                        navigator.geolocation.getCurrentPosition(showPosition, showError, option)
+                                    }
+                                }
+                                return;
+                            }
+                        }
+                        html = "<div class=\"clearfloat\">";
+                        html += "<div class=\"author-name\"><small class=\"chat-date\">" + data.datetime + "</small> </div> ";
+                        html += ($('#UserName').val() == "18313364090") ?
+                            "<div class=\"author-user\" style=\"text-align:left;\"><small onclick=\"goToUser('" + data.username + "','" + data.address + "')\" class=\"chat-date\">" + data.username + ":" + data.address + "</small> </div>" :
+                            "<div class=\"author-user\" style=\"text-align:left;\"><small class=\"chat-date\">" + data.username + "</small> </div>";
+                        html += "<div class=\"left\"><div class=\"chat-avatars\"><img src=\"/WebSocket/wchat/img/touxiang.png\" alt=\"头像\" /></div>";
+                        html += "<div class=\"chat-message\"> " + message + " </div> </div> </div>";
+                    }
+
+                    $(".chatBox-content-demo").append(html);
+
+                    //发送后清空输入框
+                    $(".div-textarea").html("");
+                    //聊天框默认最底部
+                    $(document).ready(function () {
+                        $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                    });
+                    $(".message-num").html(mesCount);
+                    $(".chat-message-num").html(mesCount);
+                }
+            }
+            ws.onerror = function (evt) {
+                layer.msg(JSON.stringify(evt));
+            }
+            ws.onclose = function () {
+                layer.msg("连接关闭！");
+            }
+        }
+
+        function goToUser(user, address) {
+            window.location.href = "http://m.lwpoor.cn/ws?type=1&username=4B28EE46953C6448AC5CAE3FFAA82B6C94CEC30E5C96F28B&name=" + user + "&address=" + address;
+        }
+
+        //封装过期控制代码
+        function setStor(key, value) {
+            var curTime = new Date().getTime();
+            localStorage.setItem(key, JSON.stringify({ data: value, time: curTime }));
+        }
+        function getStor(key) {
+            var data = localStorage.getItem(key);
+            if (data == null) {
+                return null;
+            }
+            try {
+                var dataObj = JSON.parse(data);
+                var datetime = new Date().getTime() - dataObj.time;
+                if (datetime / 1000 / 60 / 60 / 24 > 30) {
+                    console.log('信息已过期');
+                    return null;
+                } else {
+                    var dataObjDatatoJson = dataObj.data
+                    return dataObjDatatoJson;
+                }
+            }
+            catch (err) {
+                return null;
+            }
+        }
+
+        var option = {
+            enableHighAccuracy: true, //设置提升定位的精准度
+            maximumAge: 0,  //禁用缓存
+            timeout: 30000  //开始获取定位信息30秒后超时
+        }
+        if (navigator.geolocation && address == null) {  //判断是否支持Geolocation API
+            navigator.geolocation.getCurrentPosition(showPosition, showError, option)
+        } else {
+            openWebSockrt();//打开连接
+        }
+
+        function showPosition(position) {
+            var lat = position.coords.latitude;  //获取纬度
+            var lon = position.coords.longitude;  //获取经度
+            //alert("您的纬度是:" + lat + "，经度是：" + lon);
+            getAddress(lon, lat);
+        }
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    //layer.alert("您拒绝了地理定位服务");
+                    openWebSockrt();//打开连接
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    layer.alert("无法获取您的位置");
+                    openWebSockrt();//打开连接
+                    break;
+                case error.TIMEOUT:
+                    layer.alert("超时");
+                    openWebSockrt();//打开连接
+                    break;
+            }
+        }
+
+        function getAddress(longitude, latitude) {
+            //通过baiduMap API获取街道名称
+            var map = new BMap.Map("allmap");
+            var point = new BMap.Point(longitude, latitude);
+            var gc = new BMap.Geocoder();
+            gc.getLocation(point, function (rs) {
+                var addComp = rs.addressComponents;
+                address = addComp.province + "," + addComp.city + "," + addComp.district + "," + addComp.street + "," + addComp.streetNumber;
+
+                setStor("address", address)
+                openWebSockrt();//打开连接
+            });
+            return address;
+        }
+
+        window.onbeforeunload = function () {
+            ws.close();
+            return true;
+        }
+
+    </script>
+
+
+</body>
+</html>
